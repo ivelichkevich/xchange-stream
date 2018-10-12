@@ -72,7 +72,7 @@ public class GDAXStreamingService extends JsonNettyStreamingService {
     }
 
     @Override
-    public String getUnsubscribeMessage(String channelName) throws IOException {
+    public String getUnsubscribeMessage(String channelName, Object... args) throws IOException {
         GDAXWebSocketSubscriptionMessage subscribeMessage =
                 new GDAXWebSocketSubscriptionMessage(UNSUBSCRIBE, new String[]{"level2", "matches", "ticker"});
         ObjectMapper objectMapper = new ObjectMapper();

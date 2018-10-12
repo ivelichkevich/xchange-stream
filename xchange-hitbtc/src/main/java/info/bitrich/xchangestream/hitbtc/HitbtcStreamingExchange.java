@@ -3,8 +3,11 @@ package info.bitrich.xchangestream.hitbtc;
 import info.bitrich.xchangestream.core.ProductSubscription;
 import info.bitrich.xchangestream.core.StreamingExchange;
 import info.bitrich.xchangestream.core.StreamingMarketDataService;
+import info.bitrich.xchangestream.core.StreamingPrivateDataService;
 import io.reactivex.Completable;
+import io.reactivex.Observable;
 import org.knowm.xchange.ExchangeSpecification;
+import org.knowm.xchange.exceptions.NotYetImplementedForExchangeException;
 import org.knowm.xchange.hitbtc.v2.HitbtcExchange;
 
 /**
@@ -42,6 +45,11 @@ public class HitbtcStreamingExchange extends HitbtcExchange implements Streaming
     }
 
     @Override
+    public Observable<Boolean> ready() {
+        return streamingService.connected();
+    }
+
+    @Override
     public ExchangeSpecification getDefaultExchangeSpecification() {
         ExchangeSpecification spec = super.getDefaultExchangeSpecification();
         spec.setShouldLoadRemoteMetaData(false);
@@ -53,7 +61,14 @@ public class HitbtcStreamingExchange extends HitbtcExchange implements Streaming
     public StreamingMarketDataService getStreamingMarketDataService() {
         return streamingMarketDataService;
     }
-    
+
     @Override
-    public void useCompressedMessages(boolean compressedMessages) { streamingService.useCompressedMessages(compressedMessages); }
+    public StreamingPrivateDataService getStreamingPrivateDataService() {
+        throw new NotYetImplementedForExchangeException();
+    }
+
+    @Override
+    public void useCompressedMessages(boolean compressedMessages) {
+        streamingService.useCompressedMessages(compressedMessages);
+    }
 }

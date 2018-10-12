@@ -5,24 +5,24 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class CexioWebSocketOrder {
+public class CexioOrder {
 
     private final String id;
     private final BigDecimal remains;
     private final BigDecimal fremains;
     private final boolean cancel;
-    private final CexioWebSocketPair pair;
+    private final CexioCurrencyPair pair;
     private final BigDecimal price;
     private final BigDecimal amount;
     private final Date time;
     private final String type;
     private final BigDecimal fee;
 
-    public CexioWebSocketOrder(@JsonProperty("id") String id, @JsonProperty("remains") BigDecimal remains,
-                               @JsonProperty("fremains") BigDecimal fremains, @JsonProperty("cancel") boolean cancel,
-                               @JsonProperty("pair") CexioWebSocketPair pair, @JsonProperty("price") BigDecimal price,
-                               @JsonProperty("amount") BigDecimal amount, @JsonProperty("time") Date time,
-                               @JsonProperty("type") String type, @JsonProperty("fee") BigDecimal fee) {
+    public CexioOrder(@JsonProperty("id") String id, @JsonProperty("remains") BigDecimal remains,
+                      @JsonProperty("fremains") BigDecimal fremains, @JsonProperty("cancel") boolean cancel,
+                      @JsonProperty("pair") CexioCurrencyPair pair, @JsonProperty("price") BigDecimal price,
+                      @JsonProperty("amount") BigDecimal amount, @JsonProperty("time") Date time,
+                      @JsonProperty("type") String type, @JsonProperty("fee") BigDecimal fee) {
         this.id = id;
         this.remains = remains;
         this.fremains = fremains;
@@ -51,7 +51,7 @@ public class CexioWebSocketOrder {
         return cancel;
     }
 
-    public CexioWebSocketPair getPair() {
+    public CexioCurrencyPair getPair() {
         return pair;
     }
 
@@ -77,7 +77,7 @@ public class CexioWebSocketOrder {
 
     @Override
     public String toString() {
-        return "CexioWebSocketOrder{" +
+        return "CexioOrder{" +
                 "id='" + id + '\'' +
                 ", remains=" + remains +
                 ", fremains=" + fremains +

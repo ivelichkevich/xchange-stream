@@ -3,9 +3,12 @@ package info.bitrich.xchangestream.gdax;
 import info.bitrich.xchangestream.core.ProductSubscription;
 import info.bitrich.xchangestream.core.StreamingExchange;
 import info.bitrich.xchangestream.core.StreamingMarketDataService;
+import info.bitrich.xchangestream.core.StreamingPrivateDataService;
 import info.bitrich.xchangestream.service.netty.WebSocketClientHandler;
 import io.reactivex.Completable;
+import io.reactivex.Observable;
 import org.knowm.xchange.ExchangeSpecification;
+import org.knowm.xchange.exceptions.NotYetImplementedForExchangeException;
 import org.knowm.xchange.gdax.GDAXExchange;
 
 /**
@@ -17,7 +20,8 @@ public class GDAXStreamingExchange extends GDAXExchange implements StreamingExch
     private GDAXStreamingService streamingService;
     private GDAXStreamingMarketDataService streamingMarketDataService;
 
-    public GDAXStreamingExchange() { }
+    public GDAXStreamingExchange() {
+    }
 
     @Override
     protected void initServices() {
@@ -56,6 +60,11 @@ public class GDAXStreamingExchange extends GDAXExchange implements StreamingExch
         return streamingMarketDataService;
     }
 
+    @Override
+    public StreamingPrivateDataService getStreamingPrivateDataService() {
+        throw new NotYetImplementedForExchangeException();
+    }
+
     /**
      * Enables the user to listen on channel inactive events and react appropriately.
      *
@@ -71,5 +80,12 @@ public class GDAXStreamingExchange extends GDAXExchange implements StreamingExch
     }
 
     @Override
-    public void useCompressedMessages(boolean compressedMessages) { streamingService.useCompressedMessages(compressedMessages); }
+    public Observable<Boolean> ready() {
+        return streamingService.connected();
+    }
+
+    @Override
+    public void useCompressedMessages(boolean compressedMessages) {
+        streamingService.useCompressedMessages(compressedMessages);
+    }
 }

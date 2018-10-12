@@ -3,8 +3,10 @@ package info.bitrich.xchangestream.gemini;
 import info.bitrich.xchangestream.core.ProductSubscription;
 import info.bitrich.xchangestream.core.StreamingExchange;
 import info.bitrich.xchangestream.core.StreamingMarketDataService;
+import info.bitrich.xchangestream.core.StreamingPrivateDataService;
 import io.reactivex.Completable;
 import io.reactivex.CompletableEmitter;
+import io.reactivex.Observable;
 import org.knowm.xchange.exceptions.NotYetImplementedForExchangeException;
 import org.knowm.xchange.gemini.v1.GeminiExchange;
 
@@ -43,10 +45,22 @@ public class GeminiStreamingExchange extends GeminiExchange implements Streaming
     }
 
     @Override
+    public StreamingPrivateDataService getStreamingPrivateDataService() {
+        throw new NotYetImplementedForExchangeException();
+    }
+
+    @Override
     public boolean isAlive() {
         return streamingService.isAlive();
     }
 
     @Override
-    public void useCompressedMessages(boolean compressedMessages) { throw new NotYetImplementedForExchangeException(); }
+    public Observable<Boolean> ready() {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @Override
+    public void useCompressedMessages(boolean compressedMessages) {
+        throw new NotYetImplementedForExchangeException();
+    }
 }

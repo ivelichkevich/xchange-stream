@@ -3,10 +3,12 @@ package info.bitrich.xchangestream.service.netty;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
+import info.bitrich.xchangestream.service.netty.strategy.HeartbeatStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.time.Duration;
 
 public abstract class JsonNettyStreamingService extends NettyStreamingService<JsonNode> {
     private static final Logger LOG = LoggerFactory.getLogger(JsonNettyStreamingService.class);
@@ -19,9 +21,15 @@ public abstract class JsonNettyStreamingService extends NettyStreamingService<Js
         super(apiUrl, maxFramePayloadLength);
     }
 
+    public JsonNettyStreamingService(String apiUrl, int maxFramePayloadLength,
+                                     Duration connectionTimeout, Duration retryDuration,
+                                     HeartbeatStrategy heartbeatStrategy) {
+        super(apiUrl, maxFramePayloadLength, connectionTimeout, retryDuration, heartbeatStrategy);
+    }
+
     @Override
     public void messageHandler(String message) {
-        LOG.debug("Received message: {}", message);
+        LOG.trace("Received message: {}", message);
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode;
 

@@ -2,15 +2,15 @@ package info.bitrich.xchangestream.cexio.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class CexioWebSocketAuthResponse {
+public class CexioAuthResponse {
 
     private final String e;
-    private final CexioWebSocketData data;
+    private final CexioData data;
     private final String ok;
     private final long timestamp;
 
-    public CexioWebSocketAuthResponse(@JsonProperty("e") String e, @JsonProperty("data") CexioWebSocketData data,
-                                      @JsonProperty("ok") String ok, @JsonProperty("timestamp") long timestamp) {
+    public CexioAuthResponse(@JsonProperty("e") String e, @JsonProperty("data") CexioData data,
+                             @JsonProperty("ok") String ok, @JsonProperty("timestamp") long timestamp) {
         this.e = e;
         this.data = data;
         this.ok = ok;
@@ -21,7 +21,7 @@ public class CexioWebSocketAuthResponse {
         return e;
     }
 
-    public CexioWebSocketData getData() {
+    public CexioData getData() {
         return data;
     }
 
@@ -39,7 +39,7 @@ public class CexioWebSocketAuthResponse {
 
     @Override
     public String toString() {
-        return "CexioWebSocketAuthResponse{" +
+        return "CexioAuthResponse{" +
                 "e='" + e + '\'' +
                 ", data=" + data +
                 ", ok='" + ok + '\'' +

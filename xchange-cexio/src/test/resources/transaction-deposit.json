@@ -1,0 +1,15 @@
+{
+  "e": "tx",
+  "data": {
+    "txid": "4496e500c15aa3bf3a06e451b4bfa8ba8d59f46fc420191e2eeee3b6c9eae605",
+    "user": "up12345678",
+    "amount": "0.65304468",
+    "symbol": "BTC",
+    "confirmations": 0,
+    "time": "2018-05-01T15:56:46.428Z",
+    "status": "pending",
+    "type": "deposit",
+    "address": "3Mm1kFuN6AGQq3pUWAezfY3fF1C46WVFcm",
+    "id": "6124119108"
+  }
+}

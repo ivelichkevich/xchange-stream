@@ -2,13 +2,13 @@ package info.bitrich.xchangestream.cexio.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class CexioWebSocketOrderMessage {
+public class CexioOrderMessage {
 
     private final String e;
-    private final CexioWebSocketOrder data;
+    private final CexioOrder data;
 
-    public CexioWebSocketOrderMessage(@JsonProperty("e") String e,
-                                      @JsonProperty("data") CexioWebSocketOrder data) {
+    public CexioOrderMessage(@JsonProperty("e") String e,
+                             @JsonProperty("data") CexioOrder data) {
         this.e = e;
         this.data = data;
     }
@@ -17,13 +17,13 @@ public class CexioWebSocketOrderMessage {
         return e;
     }
 
-    public CexioWebSocketOrder getData() {
+    public CexioOrder getData() {
         return data;
     }
 
     @Override
     public String toString() {
-        return "CexioWebSocketOrderMessage {" +
+        return "CexioOrderMessage {" +
                 "e='" + e + '\'' +
                 ", data=" + data +
                 '}';

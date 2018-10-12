@@ -130,7 +130,7 @@ public class HitbtcStreamingService extends JsonNettyStreamingService {
     }
 
     @Override
-    public String getUnsubscribeMessage(String channelName) throws IOException {
+    public String getUnsubscribeMessage(String channelName, Object... args) throws IOException {
 
         HitbtcWebSocketSubscriptionMessage subscribeMessage = generateSubscribeMessage(channelName, "unsubscribe");
         requests.put(subscribeMessage.getId(), ImmutablePair.of(channelName, subscribeMessage.getMethod()));

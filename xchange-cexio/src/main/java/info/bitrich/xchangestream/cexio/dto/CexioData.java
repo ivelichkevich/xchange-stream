@@ -2,12 +2,12 @@ package info.bitrich.xchangestream.cexio.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class CexioWebSocketData {
+public class CexioData {
 
     private final String error;
     private final String ok;
 
-    public CexioWebSocketData(@JsonProperty("error") String error, @JsonProperty("ok") String ok) {
+    public CexioData(@JsonProperty("error") String error, @JsonProperty("ok") String ok) {
         this.error = error;
         this.ok = ok;
     }
@@ -22,7 +22,7 @@ public class CexioWebSocketData {
 
     @Override
     public String toString() {
-        return "CexioWebSocketData{" +
+        return "CexioData{" +
                 "error='" + error + '\'' +
                 ", ok='" + ok + '\'' +
                 '}';

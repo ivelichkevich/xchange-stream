@@ -2,12 +2,12 @@ package info.bitrich.xchangestream.cexio.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class CexioWebSocketPair {
+public class CexioCurrencyPair {
 
     private final String symbol1;
     private final String symbol2;
 
-    public CexioWebSocketPair(@JsonProperty("symbol1") String symbol1, @JsonProperty("symbol2") String symbol2) {
+    public CexioCurrencyPair(@JsonProperty("symbol1") String symbol1, @JsonProperty("symbol2") String symbol2) {
         this.symbol1 = symbol1;
         this.symbol2 = symbol2;
     }
@@ -22,7 +22,7 @@ public class CexioWebSocketPair {
 
     @Override
     public String toString() {
-        return "CexioWebSocketPair{" +
+        return "CexioCurrencyPair{" +
                 "symbol1='" + symbol1 + '\'' +
                 ", symbol2='" + symbol2 + '\'' +
                 '}';

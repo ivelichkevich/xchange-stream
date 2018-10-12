@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static org.knowm.xchange.bitfinex.v1.BitfinexAdapters.*;
 
@@ -26,7 +27,7 @@ public class BitfinexStreamingMarketDataService implements StreamingMarketDataSe
 
     private final BitfinexStreamingService service;
 
-    private Map<CurrencyPair, BitfinexOrderbook> orderbooks = new HashMap<>();
+    private Map<CurrencyPair, BitfinexOrderbook> orderbooks = new ConcurrentHashMap<>();
 
     public BitfinexStreamingMarketDataService(BitfinexStreamingService service) {
         this.service = service;

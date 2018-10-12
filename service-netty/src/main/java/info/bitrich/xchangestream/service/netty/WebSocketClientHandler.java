@@ -78,7 +78,7 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
             TextWebSocketFrame textFrame = (TextWebSocketFrame)frame;
             handler.onMessage(textFrame.text());
         } else if (frame instanceof PongWebSocketFrame) {
-            LOG.debug("WebSocket Client received pong");
+            LOG.trace("WebSocket Client received pong");
         } else if (frame instanceof CloseWebSocketFrame) {
             LOG.info("WebSocket Client received closing");
             ch.close();

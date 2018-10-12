@@ -1,6 +1,7 @@
 package info.bitrich.xchangestream.core;
 
 import io.reactivex.Completable;
+import io.reactivex.Observable;
 import org.knowm.xchange.Exchange;
 
 public interface StreamingExchange extends Exchange {
@@ -27,9 +28,22 @@ public interface StreamingExchange extends Exchange {
     boolean isAlive();
 
     /**
+     * Returns connection readiness status. It's either connection status for public API, or connection and successful
+     * authorization for private API
+     *
+     * @return true if ready, otherwise false
+     */
+    Observable<Boolean> ready();
+
+    /**
      * Returns service that can be used to access market data.
      */
     StreamingMarketDataService getStreamingMarketDataService();
+
+    /**
+     * Returns service that can be used to access account private data.
+     */
+    StreamingPrivateDataService getStreamingPrivateDataService();    
 
     /**
      * Set whether or not to enable compression handler.
@@ -37,5 +51,4 @@ public interface StreamingExchange extends Exchange {
      * @param compressedMessages Defaults to false
      */
     void useCompressedMessages(boolean compressedMessages);
-
 }

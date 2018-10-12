@@ -41,7 +41,7 @@ public class BitfinexStreamingService extends JsonNettyStreamingService {
 
     @Override
     public void messageHandler(String message) {
-        LOG.debug("Received message: {}", message);
+        LOG.trace("Received message: {}", message);
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode;
 
@@ -132,7 +132,7 @@ public class BitfinexStreamingService extends JsonNettyStreamingService {
     }
 
     @Override
-    public String getUnsubscribeMessage(String channelName) throws IOException {
+    public String getUnsubscribeMessage(String channelName, Object... args) throws IOException {
         String channelId = null;
         for (Map.Entry<String, String> entry : subscribedChannels.entrySet()) {
             if (entry.getValue().equals(channelName)) {
@@ -141,7 +141,10 @@ public class BitfinexStreamingService extends JsonNettyStreamingService {
             }
         }
 
-        if (channelId == null) throw new IOException("Can't find channel unique name");
+        if (channelId == null) {
+            LOG.warn( "Can't find channel unique name '{}'", channelName);
+            return null;
+        }
 
         BitfinexWebSocketUnSubscriptionMessage subscribeMessage =
                 new BitfinexWebSocketUnSubscriptionMessage(channelId);

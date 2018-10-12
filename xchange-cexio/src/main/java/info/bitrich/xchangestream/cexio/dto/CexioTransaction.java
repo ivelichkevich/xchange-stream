@@ -1,13 +1,11 @@
 package info.bitrich.xchangestream.cexio.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class CexioWebSocketTransaction {
+public class CexioTransaction {
 
     private final String id;
     private final String d;
@@ -28,25 +26,35 @@ public class CexioWebSocketTransaction {
     private final BigDecimal balance;
     private final BigDecimal feeAmount;
 
+    private final String txId;
+    private final Long confirmations;
+    private final String status;
+    private final String address;
 
-    public CexioWebSocketTransaction(@JsonProperty("id") String id,
-                                     @JsonProperty("d") String d,
-                                     @JsonProperty("c") String c,
-                                     @JsonProperty("a") BigDecimal a,
-                                     @JsonProperty("ds") BigDecimal ds,
-                                     @JsonProperty("cs") BigDecimal cs,
-                                     @JsonProperty("user") String user,
-                                     @JsonProperty("symbol") String symbol,
-                                     @JsonProperty("symbol2") String symbol2,
-                                     @JsonProperty("amount") BigDecimal amount,
-                                     @JsonProperty("order") Long order,
-                                     @JsonProperty("buy") Long buy,
-                                     @JsonProperty("sell") Long sell,
-                                     @JsonProperty("price") BigDecimal price,
-                                     @JsonProperty("type") String type,
-                                     @JsonProperty("time") Date time,
-                                     @JsonProperty("balance") BigDecimal balance,
-                                     @JsonProperty("fee_amount") BigDecimal feeAmount) {
+    public CexioTransaction(@JsonProperty("id") String id,
+                            @JsonProperty("d") String d,
+                            @JsonProperty("c") String c,
+                            @JsonProperty("a") BigDecimal a,
+                            @JsonProperty("ds") BigDecimal ds,
+                            @JsonProperty("cs") BigDecimal cs,
+                            @JsonProperty("user") String user,
+                            @JsonProperty("symbol") String symbol,
+                            @JsonProperty("symbol2") String symbol2,
+                            @JsonProperty("amount") BigDecimal amount,
+                            @JsonProperty("order") Long order,
+                            @JsonProperty("buy") Long buy,
+                            @JsonProperty("sell") Long sell,
+                            @JsonProperty("price") BigDecimal price,
+                            @JsonProperty("type") String type,
+                            @JsonProperty("time") Date time,
+                            @JsonProperty("balance") BigDecimal balance,
+                            @JsonProperty("fee_amount") BigDecimal feeAmount,
+
+                            // Balance operation specific data
+                            @JsonProperty("txid") String txId,
+                            @JsonProperty("confirmations") Long confirmations,
+                            @JsonProperty("status") String status,
+                            @JsonProperty("address") String address) {
         this.id = id;
         this.d = d;
         this.c = c;
@@ -65,6 +73,11 @@ public class CexioWebSocketTransaction {
         this.time = time;
         this.balance = balance;
         this.feeAmount = feeAmount;
+
+        this.txId = txId;
+        this.confirmations = confirmations;
+        this.status = status;
+        this.address = address;
     }
 
     public String getId() {
@@ -139,33 +152,52 @@ public class CexioWebSocketTransaction {
         return feeAmount;
     }
 
+    public String getTxId() {
+        return txId;
+    }
+
+    public Long getConfirmations() {
+        return confirmations;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof CexioWebSocketTransaction)) return false;
+        if (!(o instanceof CexioTransaction)) return false;
 
-        CexioWebSocketTransaction that = (CexioWebSocketTransaction) o;
+        CexioTransaction that = (CexioTransaction) o;
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (d != null ? !d.equals(that.d) : that.d != null) return false;
         if (c != null ? !c.equals(that.c) : that.c != null) return false;
+        if (a != null ? !a.equals(that.a) : that.a != null) return false;
+        if (ds != null ? !ds.equals(that.ds) : that.ds != null) return false;
+        if (cs != null ? !cs.equals(that.cs) : that.cs != null) return false;
         if (user != null ? !user.equals(that.user) : that.user != null) return false;
         if (symbol != null ? !symbol.equals(that.symbol) : that.symbol != null) return false;
         if (symbol2 != null ? !symbol2.equals(that.symbol2) : that.symbol2 != null) return false;
+        if (amount != null ? !amount.equals(that.amount) : that.amount != null) return false;
         if (buy != null ? !buy.equals(that.buy) : that.buy != null) return false;
         if (order != null ? !order.equals(that.order) : that.order != null) return false;
         if (sell != null ? !sell.equals(that.sell) : that.sell != null) return false;
+        if (price != null ? !price.equals(that.price) : that.price != null) return false;
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
         if (time != null ? !time.equals(that.time) : that.time != null) return false;
-
-        if (a != null ? a.compareTo(that.a) != 0 : that.a != null) return false;
-        if (ds != null ? ds.compareTo(that.ds) != 0 : that.ds != null) return false;
-        if (cs != null ? cs.compareTo(that.cs) != 0 : that.cs != null) return false;
-        if (amount != null ? amount.compareTo(that.amount) != 0 : that.amount != null) return false;
-        if (price != null ? price.compareTo(that.price) != 0 : that.price != null) return false;
-        if (balance != null ? balance.compareTo(that.balance) != 0 : that.balance != null) return false;
-
-        return feeAmount != null ? feeAmount.compareTo(that.feeAmount) == 0 : that.feeAmount == null;
+        if (balance != null ? !balance.equals(that.balance) : that.balance != null) return false;
+        if (feeAmount != null ? !feeAmount.equals(that.feeAmount) : that.feeAmount != null) return false;
+        if (txId != null ? !txId.equals(that.txId) : that.txId != null) return false;
+        if (confirmations != null ? !confirmations.equals(that.confirmations) : that.confirmations != null)
+            return false;
+        if (status != null ? !status.equals(that.status) : that.status != null) return false;
+        return address != null ? address.equals(that.address) : that.address == null;
     }
 
     @Override
@@ -188,6 +220,10 @@ public class CexioWebSocketTransaction {
         result = 31 * result + (time != null ? time.hashCode() : 0);
         result = 31 * result + (balance != null ? balance.hashCode() : 0);
         result = 31 * result + (feeAmount != null ? feeAmount.hashCode() : 0);
+        result = 31 * result + (txId != null ? txId.hashCode() : 0);
+        result = 31 * result + (confirmations != null ? confirmations.hashCode() : 0);
+        result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + (address != null ? address.hashCode() : 0);
         return result;
     }
 
@@ -212,6 +248,10 @@ public class CexioWebSocketTransaction {
         buffer.append(", time=").append(time);
         buffer.append(", balance=").append(balance);
         buffer.append(", feeAmount=").append(feeAmount);
+        buffer.append(", txId='").append(txId).append('\'');
+        buffer.append(", confirmations=").append(confirmations);
+        buffer.append(", status='").append(status).append('\'');
+        buffer.append(", address='").append(address).append('\'');
         buffer.append('}');
         return buffer.toString();
     }

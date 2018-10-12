@@ -3,8 +3,10 @@ package info.bitrich.xchangestream.poloniex;
 import info.bitrich.xchangestream.core.ProductSubscription;
 import info.bitrich.xchangestream.core.StreamingExchange;
 import info.bitrich.xchangestream.core.StreamingMarketDataService;
+import info.bitrich.xchangestream.core.StreamingPrivateDataService;
 import info.bitrich.xchangestream.service.wamp.WampStreamingService;
 import io.reactivex.Completable;
+import io.reactivex.Observable;
 import org.knowm.xchange.exceptions.NotYetImplementedForExchangeException;
 import org.knowm.xchange.poloniex.PoloniexExchange;
 
@@ -41,10 +43,22 @@ public class PoloniexStreamingExchange extends PoloniexExchange implements Strea
     }
 
     @Override
+    public StreamingPrivateDataService getStreamingPrivateDataService() {
+        throw new NotYetImplementedForExchangeException();
+    }
+
+    @Override
     public boolean isAlive() {
         return streamingService.isSocketOpen();
     }
 
     @Override
-    public void useCompressedMessages(boolean compressedMessages) { streamingService.useCompressedMessages(compressedMessages); }
+    public Observable<Boolean> ready() {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @Override
+    public void useCompressedMessages(boolean compressedMessages) {
+        streamingService.useCompressedMessages(compressedMessages);
+    }
 }

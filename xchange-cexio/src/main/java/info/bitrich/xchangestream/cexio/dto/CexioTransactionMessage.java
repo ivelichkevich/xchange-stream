@@ -2,13 +2,13 @@ package info.bitrich.xchangestream.cexio.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class CexioWebSocketTransactionMessage {
+public class CexioTransactionMessage {
 
     private final String e;
-    private final CexioWebSocketTransaction data;
+    private final CexioTransaction data;
 
-    public CexioWebSocketTransactionMessage(@JsonProperty("e") String e,
-                                            @JsonProperty("data") CexioWebSocketTransaction data) {
+    public CexioTransactionMessage(@JsonProperty("e") String e,
+                                   @JsonProperty("data") CexioTransaction data) {
         this.e = e;
         this.data = data;
     }
@@ -17,7 +17,7 @@ public class CexioWebSocketTransactionMessage {
         return e;
     }
 
-    public CexioWebSocketTransaction getData() {
+    public CexioTransaction getData() {
         return data;
     }
 

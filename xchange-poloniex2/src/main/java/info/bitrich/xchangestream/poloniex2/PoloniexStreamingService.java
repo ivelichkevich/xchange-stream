@@ -61,7 +61,7 @@ public class PoloniexStreamingService extends JsonNettyStreamingService {
 
     @Override
     public void messageHandler(String message) {
-        LOG.debug("Received message: {}", message);
+        LOG.trace("Received message: {}", message);
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode;
 
@@ -83,7 +83,7 @@ public class PoloniexStreamingService extends JsonNettyStreamingService {
 
     @Override
     public Observable<JsonNode> subscribeChannel(String channelName, Object... args) {
-        if (!channels.containsKey(channelName)) {
+        if (!subscriptions.containsKey(channelName)) {
             Observable<JsonNode> subscription = super.subscribeChannel(channelName, args);
             subscriptions.put(channelName, subscription);
         }
@@ -121,7 +121,7 @@ public class PoloniexStreamingService extends JsonNettyStreamingService {
     }
 
     @Override
-    public String getUnsubscribeMessage(String channelName) throws IOException {
+    public String getUnsubscribeMessage(String channelName, Object... args) throws IOException {
         PoloniexWebSocketSubscriptionMessage subscribeMessage = new PoloniexWebSocketSubscriptionMessage("unsubscribe",
                 channelName);
 
