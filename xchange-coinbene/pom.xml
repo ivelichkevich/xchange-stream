@@ -7,7 +7,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>xchange-gdax</artifactId>
+    <artifactId>xchange-coinbene</artifactId>
 
     <dependencies>
         <dependency>
@@ -16,15 +16,9 @@
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
-            <groupId>info.bitrich.xchange-stream</groupId>
-            <artifactId>service-netty</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.knowm.xchange</groupId>
-            <artifactId>xchange-gdax</artifactId>
-            <!--<version>${xchange.version}</version>-->
-            <version>4.3.11</version> <!-- change to coinbasepro -->
+            <artifactId>xchange-coinbene</artifactId>
+            <version>${xchange.version}</version>
         </dependency>
     </dependencies>
-</project> 
+</project>
