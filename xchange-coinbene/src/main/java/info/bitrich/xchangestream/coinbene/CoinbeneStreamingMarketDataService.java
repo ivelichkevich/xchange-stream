@@ -37,6 +37,14 @@ public class CoinbeneStreamingMarketDataService implements StreamingMarketDataSe
         this.marketDataService = marketDataService;
     }
 
+    /**
+     * https://github.com/Coinbene/API-Documents/wiki/0.0.0-Coinbene-API-documents
+     * For every IP, except the "Place order" and "Cancel order" API's access limit is 10times/10s,others is 100times/10s.
+     *
+     * @param currencyPair Currency pair of the order book
+     * @param args
+     * @return
+     */
     @Override
     public Observable<OrderBook> getOrderBook(CurrencyPair currencyPair, Object... args) {
         return create(emitter -> runAsync(() -> {
@@ -57,6 +65,11 @@ public class CoinbeneStreamingMarketDataService implements StreamingMarketDataSe
                     LOG.error("Error on getting OrderBook", e);
                 } catch (NoSuchAlgorithmException e) {
                     LOG.error("Error on SAH algorithm", e);
+                }
+                try {
+                    Thread.sleep(100); //TODO replace for one timer for all instancec
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         }));
