@@ -66,7 +66,7 @@ public class CoinbeneStreamingMarketDataService implements StreamingMarketDataSe
                 } catch (NoSuchAlgorithmException e) {
                     LOG.error("Error on SAH algorithm", e);
                 }
-                try {
+                try { //https://www.ibm.com/developerworks/ru/library/j-5things5/index.html
                     Thread.sleep(200); //TODO replace for one timer for all instances
                 } catch (InterruptedException e) {
                     e.printStackTrace();
