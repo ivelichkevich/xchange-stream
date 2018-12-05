@@ -1,18 +1,18 @@
-package info.bitrich.xchangestream.gdax;
+package info.bitrich.xchangestream.coinbasepro;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import info.bitrich.xchangestream.core.StreamingMarketDataService;
-import info.bitrich.xchangestream.gdax.dto.GDAXWebSocketTransaction;
+import info.bitrich.xchangestream.coinbasepro.dto.CoinbaseProWebSocketTransaction;
 import io.reactivex.Observable;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.marketdata.OrderBook;
 import org.knowm.xchange.dto.marketdata.Ticker;
 import org.knowm.xchange.dto.marketdata.Trade;
 import org.knowm.xchange.dto.marketdata.Trades;
-import org.knowm.xchange.gdax.dto.marketdata.GDAXProductBook;
-import org.knowm.xchange.gdax.dto.marketdata.GDAXProductTicker;
-import org.knowm.xchange.gdax.dto.marketdata.GDAXTrade;
+import org.knowm.xchange.coinbasepro.dto.marketdata.CoinbaseProProductBook;
+import org.knowm.xchange.coinbasepro.dto.marketdata.CoinbaseProProductTicker;
+import org.knowm.xchange.coinbasepro.dto.marketdata.CoinbaseProTrade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,19 +20,19 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import static io.netty.util.internal.StringUtil.isNullOrEmpty;
-import static org.knowm.xchange.gdax.GDAXAdapters.*;
+import static org.knowm.xchange.coinbasepro.CoinbaseProAdapters.*;
 
 /**
  * Created by luca on 4/3/17.
  */
-public class GDAXStreamingMarketDataService implements StreamingMarketDataService {
-    private static final Logger LOG = LoggerFactory.getLogger(GDAXStreamingMarketDataService.class);
+public class CoinbaseProStreamingMarketDataService implements StreamingMarketDataService {
+    private static final Logger LOG = LoggerFactory.getLogger(CoinbaseProStreamingMarketDataService.class);
 
-    private final GDAXStreamingService service;
+    private final CoinbaseProStreamingService service;
     private Map<CurrencyPair, SortedMap<BigDecimal, String>> bids = new HashMap<>();
     private Map<CurrencyPair, SortedMap<BigDecimal, String>> asks = new HashMap<>();
 
-    GDAXStreamingMarketDataService(GDAXStreamingService service) {
+    CoinbaseProStreamingMarketDataService(CoinbaseProStreamingService service) {
         this.service = service;
     }
 
@@ -57,8 +57,8 @@ public class GDAXStreamingMarketDataService implements StreamingMarketDataServic
 
         final int maxDepth = (args.length > 0 && args[0] instanceof Integer) ? (int) args[0] : 0;
 
-        Observable<GDAXWebSocketTransaction> subscribedChannel = service.subscribeChannel(channelName)
-                .map(s -> mapper.readValue(s.toString(), GDAXWebSocketTransaction.class));
+        Observable<CoinbaseProWebSocketTransaction> subscribedChannel = service.subscribeChannel(channelName)
+                .map(s -> mapper.readValue(s.toString(), CoinbaseProWebSocketTransaction.class));
 
         return subscribedChannel
                 .filter(message -> !isNullOrEmpty(message.getType()) &&
@@ -70,19 +70,19 @@ public class GDAXStreamingMarketDataService implements StreamingMarketDataServic
                         asks.put(currencyPair, new TreeMap<>());
                     }
 
-                    GDAXProductBook productBook = s.toGDAXProductBook(bids.get(currencyPair), asks.get(currencyPair), maxDepth);
+                    CoinbaseProProductBook productBook = s.toCoinbaseProProductBook(bids.get(currencyPair), asks.get(currencyPair), maxDepth);
                     return adaptOrderBook(productBook, currencyPair);
                 });
     }
 
     /**
-     * Returns an Observable of {@link GDAXProductTicker}, not converted to {@link Ticker}
+     * Returns an Observable of {@link CoinbaseProProductTicker}, not converted to {@link Ticker}
      *
      * @param currencyPair the currency pair.
      * @param args         optional arguments.
-     * @return an Observable of {@link GDAXProductTicker}.
+     * @return an Observable of {@link CoinbaseProProductTicker}.
      */
-    public Observable<GDAXProductTicker> getRawTicker(CurrencyPair currencyPair, Object... args) {
+    public Observable<CoinbaseProProductTicker> getRawTicker(CurrencyPair currencyPair, Object... args) {
         if (!containsPair(service.getProduct().getTicker(), currencyPair))
             throw new UnsupportedOperationException(String.format("The currency pair %s is not subscribed for ticker", currencyPair));
 
@@ -90,18 +90,18 @@ public class GDAXStreamingMarketDataService implements StreamingMarketDataServic
         final ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-        Observable<GDAXWebSocketTransaction> subscribedChannel = service.subscribeChannel(channelName)
-                .map(s -> mapper.readValue(s.toString(), GDAXWebSocketTransaction.class));
+        Observable<CoinbaseProWebSocketTransaction> subscribedChannel = service.subscribeChannel(channelName)
+                .map(s -> mapper.readValue(s.toString(), CoinbaseProWebSocketTransaction.class));
 
         return subscribedChannel
                 .filter(message -> !isNullOrEmpty(message.getType()) && message.getType().equals("match") &&
                         message.getProductId().equals(channelName))
-                .map(GDAXWebSocketTransaction::toGDAXProductTicker);
+                .map(CoinbaseProWebSocketTransaction::toCoinbaseProProductTicker);
     }
 
     /**
-     * Returns the GDAX ticker converted to the normalized XChange object.
-     * GDAX does not directly provide ticker data via web service.
+     * Returns the CoinbasePro ticker converted to the normalized XChange object.
+     * CoinbasePro does not directly provide ticker data via web service.
      * As stated by: https://docs.gdax.com/#get-product-ticker, we can just listen for 'match' messages.
      *
      * @param currencyPair Currency pair of the ticker
@@ -117,13 +117,13 @@ public class GDAXStreamingMarketDataService implements StreamingMarketDataServic
         final ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-        Observable<GDAXWebSocketTransaction> subscribedChannel = service.subscribeChannel(channelName)
-                .map(s -> mapper.readValue(s.toString(), GDAXWebSocketTransaction.class));
+        Observable<CoinbaseProWebSocketTransaction> subscribedChannel = service.subscribeChannel(channelName)
+                .map(s -> mapper.readValue(s.toString(), CoinbaseProWebSocketTransaction.class));
 
         return subscribedChannel
                 .filter(message -> !isNullOrEmpty(message.getType()) && message.getType().equals("ticker") &&
                         message.getProductId().equals(channelName))
-                .map(s -> adaptTicker(s.toGDAXProductTicker(), s.toGDAXProductStats(), currencyPair));
+                .map(s -> adaptTicker(s.toCoinbaseProProductTicker(), s.toCoinbaseProProductStats(), currencyPair));
     }
 
     @Override
@@ -135,14 +135,14 @@ public class GDAXStreamingMarketDataService implements StreamingMarketDataServic
         final ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-        Observable<GDAXWebSocketTransaction> subscribedChannel = service.subscribeChannel(channelName)
-                .map(s -> mapper.readValue(s.toString(), GDAXWebSocketTransaction.class));
+        Observable<CoinbaseProWebSocketTransaction> subscribedChannel = service.subscribeChannel(channelName)
+                .map(s -> mapper.readValue(s.toString(), CoinbaseProWebSocketTransaction.class));
 
         return subscribedChannel
                 .filter(message -> !isNullOrEmpty(message.getType()) && message.getType().equals("match") &&
                         message.getProductId().equals(channelName))
                 .map(s -> {
-                            Trades adaptedTrades = adaptTrades(new GDAXTrade[]{s.toGDAXTrade()}, currencyPair);
+                            Trades adaptedTrades = adaptTrades(new CoinbaseProTrade[]{s.toCoinbaseProTrade()}, currencyPair);
                             return adaptedTrades.getTrades().get(0);
                         }
                 );

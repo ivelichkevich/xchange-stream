@@ -1,4 +1,4 @@
-package info.bitrich.xchangestream.gdax;
+package info.bitrich.xchangestream.coinbasepro;
 
 import info.bitrich.xchangestream.core.ProductSubscription;
 import info.bitrich.xchangestream.core.StreamingExchange;
@@ -6,18 +6,18 @@ import info.bitrich.xchangestream.core.StreamingMarketDataService;
 import info.bitrich.xchangestream.service.netty.WebSocketClientHandler;
 import io.reactivex.Completable;
 import org.knowm.xchange.ExchangeSpecification;
-import org.knowm.xchange.gdax.GDAXExchange;
+import org.knowm.xchange.coinbasepro.CoinbaseProExchange;
 
 /**
- * GDAX Streaming Exchange. Connects to live WebSocket feed.
+ * CoinbasePro Streaming Exchange. Connects to live WebSocket feed.
  */
-public class GDAXStreamingExchange extends GDAXExchange implements StreamingExchange {
-    private static final String API_URI = "wss://ws-feed.gdax.com";
+public class CoinbaseProStreamingExchange extends CoinbaseProExchange implements StreamingExchange {
+    private static final String API_URI = "wss://ws-feed.pro.coinbase.com";
 
-    private GDAXStreamingService streamingService;
-    private GDAXStreamingMarketDataService streamingMarketDataService;
+    private CoinbaseProStreamingService streamingService;
+    private CoinbaseProStreamingMarketDataService streamingMarketDataService;
 
-    public GDAXStreamingExchange() { }
+    public CoinbaseProStreamingExchange() { }
 
     @Override
     protected void initServices() {
@@ -28,8 +28,8 @@ public class GDAXStreamingExchange extends GDAXExchange implements StreamingExch
     public Completable connect(ProductSubscription... args) {
         if (args == null || args.length == 0)
             throw new UnsupportedOperationException("The ProductSubscription must be defined!");
-        this.streamingService = new GDAXStreamingService(API_URI);
-        this.streamingMarketDataService = new GDAXStreamingMarketDataService(this.streamingService);
+        this.streamingService = new CoinbaseProStreamingService(API_URI);
+        this.streamingMarketDataService = new CoinbaseProStreamingMarketDataService(this.streamingService);
         streamingService.subscribeMultipleCurrencyPairs(args);
 
         return streamingService.connect();
@@ -37,7 +37,7 @@ public class GDAXStreamingExchange extends GDAXExchange implements StreamingExch
 
     @Override
     public Completable disconnect() {
-        GDAXStreamingService service = this.streamingService;
+        CoinbaseProStreamingService service = this.streamingService;
         streamingService = null;
         streamingMarketDataService = null;
         return service.disconnect();

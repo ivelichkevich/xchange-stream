@@ -1,10 +1,10 @@
-package info.bitrich.xchangestream.gdax;
+package info.bitrich.xchangestream.coinbasepro;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import info.bitrich.xchangestream.core.ProductSubscription;
-import info.bitrich.xchangestream.gdax.dto.GDAXWebSocketSubscriptionMessage;
-import info.bitrich.xchangestream.gdax.netty.WebSocketClientCompressionAllowClientNoContextHandler;
+import info.bitrich.xchangestream.coinbasepro.dto.CoinbaseProWebSocketSubscriptionMessage;
+import info.bitrich.xchangestream.coinbasepro.netty.WebSocketClientCompressionAllowClientNoContextHandler;
 import info.bitrich.xchangestream.service.netty.JsonNettyStreamingService;
 import info.bitrich.xchangestream.service.netty.WebSocketClientHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -18,8 +18,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GDAXStreamingService extends JsonNettyStreamingService {
-    private static final Logger LOG = LoggerFactory.getLogger(GDAXStreamingService.class);
+public class CoinbaseProStreamingService extends JsonNettyStreamingService {
+    private static final Logger LOG = LoggerFactory.getLogger(CoinbaseProStreamingService.class);
     private static final String SUBSCRIBE = "subscribe";
     private static final String UNSUBSCRIBE = "unsubscribe";
     private static final String SHARE_CHANNEL_NAME = "ALL";
@@ -28,7 +28,7 @@ public class GDAXStreamingService extends JsonNettyStreamingService {
 
     private WebSocketClientHandler.WebSocketMessageHandler channelInactiveHandler = null;
 
-    public GDAXStreamingService(String apiUrl) {
+    public CoinbaseProStreamingService(String apiUrl) {
         super(apiUrl, Integer.MAX_VALUE);
     }
 
@@ -66,15 +66,15 @@ public class GDAXStreamingService extends JsonNettyStreamingService {
 
     @Override
     public String getSubscribeMessage(String channelName, Object... args) throws IOException {
-        GDAXWebSocketSubscriptionMessage subscribeMessage = new GDAXWebSocketSubscriptionMessage(SUBSCRIBE, product);
+        CoinbaseProWebSocketSubscriptionMessage subscribeMessage = new CoinbaseProWebSocketSubscriptionMessage(SUBSCRIBE, product);
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.writeValueAsString(subscribeMessage);
     }
 
     @Override
     public String getUnsubscribeMessage(String channelName) throws IOException {
-        GDAXWebSocketSubscriptionMessage subscribeMessage =
-                new GDAXWebSocketSubscriptionMessage(UNSUBSCRIBE, new String[]{"level2", "matches", "ticker"});
+        CoinbaseProWebSocketSubscriptionMessage subscribeMessage =
+                new CoinbaseProWebSocketSubscriptionMessage(UNSUBSCRIBE, new String[]{"level2", "matches", "ticker"});
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.writeValueAsString(subscribeMessage);
     }
@@ -92,8 +92,8 @@ public class GDAXStreamingService extends JsonNettyStreamingService {
     @Override
     protected WebSocketClientHandler getWebSocketClientHandler(WebSocketClientHandshaker handshaker,
                                                                WebSocketClientHandler.WebSocketMessageHandler handler) {
-        LOG.info("Registering GDAXWebSocketClientHandler");
-        return new GDAXWebSocketClientHandler(handshaker, handler);
+        LOG.info("Registering CoinbaseProWebSocketClientHandler");
+        return new CoinbaseProWebSocketClientHandler(handshaker, handler);
     }
 
     public void setChannelInactiveHandler(WebSocketClientHandler.WebSocketMessageHandler channelInactiveHandler) {
@@ -106,11 +106,11 @@ public class GDAXStreamingService extends JsonNettyStreamingService {
 
     /**
      * Custom client handler in order to execute an external, user-provided handler on channel events.
-     * This is useful because it seems GDAX unexpectedly closes the web socket connection.
+     * This is useful because it seems CoinbasePro unexpectedly closes the web socket connection.
      */
-    class GDAXWebSocketClientHandler extends NettyWebSocketClientHandler {
+    class CoinbaseProWebSocketClientHandler extends NettyWebSocketClientHandler {
 
-        public GDAXWebSocketClientHandler(WebSocketClientHandshaker handshaker, WebSocketMessageHandler handler) {
+        public CoinbaseProWebSocketClientHandler(WebSocketClientHandshaker handshaker, WebSocketMessageHandler handler) {
             super(handshaker, handler);
         }
 

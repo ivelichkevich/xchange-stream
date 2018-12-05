@@ -1,4 +1,4 @@
-package info.bitrich.xchangestream.gdax.netty;
+package info.bitrich.xchangestream.coinbasepro.netty;
 
 import io.netty.channel.ChannelHandler;
 import io.netty.handler.codec.compression.ZlibCodecFactory;
@@ -9,7 +9,7 @@ import io.netty.handler.codec.http.websocketx.extensions.compression.PerMessageD
 import static io.netty.handler.codec.http.websocketx.extensions.compression.PerMessageDeflateServerExtensionHandshaker.MAX_WINDOW_SIZE;
 
 /**
- * Custom WebSocket client extension handler. GDAX needs very specific WebSocket extensions enabled.
+ * Custom WebSocket client extension handler. CoinbasePro needs very specific WebSocket extensions enabled.
  */
 @ChannelHandler.Sharable
 public final class WebSocketClientCompressionAllowClientNoContextHandler extends WebSocketClientExtensionHandler {

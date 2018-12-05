@@ -7,7 +7,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>xchange-gdax</artifactId>
+    <artifactId>xchange-coinbasepro</artifactId>
 
     <dependencies>
         <dependency>
@@ -22,9 +22,8 @@
         </dependency>
         <dependency>
             <groupId>org.knowm.xchange</groupId>
-            <artifactId>xchange-gdax</artifactId>
-            <!--<version>${xchange.version}</version>-->
-            <version>4.3.11</version> <!-- change to coinbasepro -->
+            <artifactId>xchange-coinbasepro</artifactId>
+            <version>${xchange.version}</version>
         </dependency>
     </dependencies>
 </project> 

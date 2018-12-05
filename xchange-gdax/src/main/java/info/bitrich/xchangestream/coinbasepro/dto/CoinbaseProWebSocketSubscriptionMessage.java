@@ -1,4 +1,4 @@
-package info.bitrich.xchangestream.gdax.dto;
+package info.bitrich.xchangestream.coinbasepro.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import info.bitrich.xchangestream.core.ProductSubscription;
@@ -10,23 +10,23 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * GDAX subscription message.
+ * CoinbasePro subscription message.
  */
-public class GDAXWebSocketSubscriptionMessage {
+public class CoinbaseProWebSocketSubscriptionMessage {
 
     public static final String TYPE = "type";
     public static final String CHANNELS = "channels";
     public static final String PRODUCT_IDS = "product_ids";
     public static final String NAME = "name";
 
-    class GDAXProductSubsctiption {
+    class CoinbaseProProductSubsctiption {
         @JsonProperty(NAME)
         private String name;
 
         @JsonProperty(PRODUCT_IDS)
         private String[] productIds;
 
-        public GDAXProductSubsctiption(String name, String[] productIds) {
+        public CoinbaseProProductSubsctiption(String name, String[] productIds) {
             this.name = name;
             this.productIds = productIds;
         }
@@ -44,14 +44,14 @@ public class GDAXWebSocketSubscriptionMessage {
     private String type;
 
     @JsonProperty(CHANNELS)
-    private GDAXProductSubsctiption[] channels;
+    private CoinbaseProProductSubsctiption[] channels;
 
-    public GDAXWebSocketSubscriptionMessage(String type, ProductSubscription product) {
+    public CoinbaseProWebSocketSubscriptionMessage(String type, ProductSubscription product) {
         this.type = type;
         generateSubscriptionMessage(product);
     }
 
-    public GDAXWebSocketSubscriptionMessage(String type, String[] channelNames) {
+    public CoinbaseProWebSocketSubscriptionMessage(String type, String[] channelNames) {
         this.type = type;
         generateSubscriptionMessage(channelNames);
     }
@@ -65,23 +65,23 @@ public class GDAXWebSocketSubscriptionMessage {
         return productIds.toArray(new String[productIds.size()]);
     }
 
-    private GDAXProductSubsctiption generateGDAXProduct(String name, CurrencyPair[] pairs) {
+    private CoinbaseProProductSubsctiption generateCoinbaseProProduct(String name, CurrencyPair[] pairs) {
         String[] productsIds;
         productsIds = generateProductIds(pairs);
-        return new GDAXProductSubsctiption(name, productsIds);
+        return new CoinbaseProProductSubsctiption(name, productsIds);
     }
 
     private void generateSubscriptionMessage(String[] channelNames) {
-        List<GDAXProductSubsctiption> channels = new ArrayList<>(3);
+        List<CoinbaseProProductSubsctiption> channels = new ArrayList<>(3);
         for (String name : channelNames) {
-            channels.add(new GDAXProductSubsctiption(name, null));
+            channels.add(new CoinbaseProProductSubsctiption(name, null));
         }
 
-        this.channels = channels.toArray(new GDAXProductSubsctiption[channels.size()]);
+        this.channels = channels.toArray(new CoinbaseProProductSubsctiption[channels.size()]);
     }
 
     private void generateSubscriptionMessage(ProductSubscription productSubscription) {
-        List<GDAXProductSubsctiption> channels = new ArrayList<>(3);
+        List<CoinbaseProProductSubsctiption> channels = new ArrayList<>(3);
         Map<String, List<CurrencyPair>> pairs = new HashMap<>(3);
 
         pairs.put("level2", productSubscription.getOrderBook());
@@ -93,18 +93,18 @@ public class GDAXWebSocketSubscriptionMessage {
             if (currencyPairs == null || currencyPairs.size() == 0) {
                 continue;
             }
-            GDAXProductSubsctiption gdaxProduct = generateGDAXProduct(product.getKey(), product.getValue().toArray(new CurrencyPair[product.getValue().size()]));
-            channels.add(gdaxProduct);
+            CoinbaseProProductSubsctiption coinbaseProProduct = generateCoinbaseProProduct(product.getKey(), product.getValue().toArray(new CurrencyPair[product.getValue().size()]));
+            channels.add(coinbaseProProduct);
         }
 
-        this.channels = channels.toArray(new GDAXProductSubsctiption[channels.size()]);
+        this.channels = channels.toArray(new CoinbaseProProductSubsctiption[channels.size()]);
     }
 
     public String getType() {
         return type;
     }
 
-    public GDAXProductSubsctiption[] getChannels() {
+    public CoinbaseProProductSubsctiption[] getChannels() {
         return channels;
     }
 }
