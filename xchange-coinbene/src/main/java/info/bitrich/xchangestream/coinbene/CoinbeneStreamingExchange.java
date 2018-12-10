@@ -23,6 +23,7 @@ public class CoinbeneStreamingExchange extends CoinbeneExchange implements Strea
 
     @Override
     public Completable disconnect() {
+        streamingMarketDataService.disposeAll();
         return Completable.complete();
     }
 
@@ -33,7 +34,7 @@ public class CoinbeneStreamingExchange extends CoinbeneExchange implements Strea
 
     @Override
     public boolean isAlive() {
-        return true;
+        return streamingMarketDataService.isAlive();
     }
 
     @Override
